@@ -1,17 +1,16 @@
 import streamlit as st
 from joblib import load
 
-# Load your models
+
 presence_classifier = load('api/presence_classifier.joblib')
 presence_vect = load('api/presence_vectorizer.joblib')
 category_classifier = load('api/category_classifier.joblib')
 category_vect = load('api/category_vectorizer.joblib')
 
-# Streamlit app
 def main():
     st.title("Dark Pattern Detection")
 
-    # Get user input
+    
     tokens = st.text_area("Enter tokens (one per line):", "").split('\n')
 
     if st.button("Detect Dark Patterns"):
