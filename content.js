@@ -12,7 +12,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        data = data.replace(/'/g, '"');
         const json = JSON.parse(data);
 
         let dpCount = 0;
@@ -33,7 +32,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
         // Store the number of dark patterns
         const g = document.createElement("div");
-        g.id = "insite_count";
+        g.id = "dark_pattern_count";
         g.value = dpCount;
         g.style.opacity = 0;
         g.style.position = "fixed";
@@ -52,10 +51,10 @@ function scrape() {
 }
 
 function highlight(element, type) {
-  element.classList.add("insite-highlight");
+  element.classList.add("dark-pattern-highlight");
 
   const body = document.createElement("span");
-  body.classList.add("insite-highlight-body");
+  body.classList.add("dark-pattern-highlight-body");
 
   // Header
   const header = document.createElement("div");
@@ -76,7 +75,7 @@ function highlight(element, type) {
 
 function sendDarkPatterns(number) {
   chrome.runtime.sendMessage({
-    message: "update_current_count",
+    message: "update_dark_pattern_count",
     count: number,
   });
 }
@@ -85,7 +84,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.message === "analyze_site") {
     scrape();
   } else if (request.message === "popup_open") {
-    const element = document.getElementById("insite_count");
+    const element = document.getElementById("dark_pattern_count");
     if (element) {
       sendDarkPatterns(element.value);
     }
